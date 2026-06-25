@@ -9,13 +9,6 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WL8N2R87');</script>
   <!-- End Google Tag Manager -->
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-WL8N2R87');</script>
-  <!-- End Google Tag Manager -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Hoa Surf Insights</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>" />
@@ -33,8 +26,8 @@
       --c-border:  #E0EEEC;
       --c-text:    #1A2E2D;
       --c-muted:   #6B8E8C;
-      --radius:    14px;
-      --radius-sm: 8px;
+      --radius:    18px;
+      --radius-sm: 10px;
     }
     html, body {
       background: var(--c-bg);
@@ -127,7 +120,7 @@
       padding: 8px;
       border: none;
       background: transparent;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 500;
       color: var(--c-muted);
@@ -160,10 +153,10 @@
       border: 1px solid var(--c-border);
       margin: 0 16px;
       padding: 14px 16px;
+      box-shadow: 0 4px 16px rgba(11,79,74,0.06);
     }
-    .chart-wrap { position: relative; }
 
-    /* ── Horizontal bar chart (day view) ── */
+    /* ── Horizontal bar chart ── */
     .hbar-chart { display: flex; flex-direction: column; gap: 10px; }
     .hbar-row { display: flex; align-items: center; gap: 10px; }
     .hbar-label { font-size: 12px; font-weight: 500; color: var(--c-text); width: 72px; flex-shrink: 0; }
@@ -176,8 +169,8 @@
       padding-left: 10px;
       font-size: 12px;
       font-weight: 600;
-      transition: width 0.4s ease;
-      min-width: 48px;
+      transition: width 0.5s ease;
+      min-width: 52px;
     }
 
     /* ── Score cards ── */
@@ -187,11 +180,12 @@
       border: 1px solid var(--c-border);
       margin: 0 16px 10px;
       padding: 16px;
-      box-shadow: 0 1px 4px rgba(11,79,74,0.05);
+      box-shadow: 0 4px 16px rgba(11,79,74,0.06);
+      transition: box-shadow 0.15s;
     }
     .score-card.best {
       border-color: var(--c-swell);
-      box-shadow: 0 2px 10px rgba(11,79,74,0.12);
+      box-shadow: 0 6px 24px rgba(11,79,74,0.14);
     }
     .score-header {
       display: flex;
@@ -224,19 +218,34 @@
       border-radius: 20px;
       margin-top: 4px;
     }
-    .score-circle {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
+
+    /* ── Score circle SVG ring ── */
+    .score-ring-wrap {
+      width: 60px;
+      height: 60px;
       flex-shrink: 0;
+      position: relative;
+    }
+    .score-ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+    .score-ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
       line-height: 1.1;
     }
+    .score-ring-num {
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .score-ring-denom {
+      font-size: 9px;
+      color: var(--c-muted);
+    }
+
     .comment {
       font-size: 13px;
       color: #444;
@@ -280,6 +289,12 @@
       border: 1px solid var(--c-border);
       padding: 10px 8px;
       text-align: center;
+      box-shadow: 0 4px 16px rgba(11,79,74,0.06);
+    }
+    .kpi-card.accent {
+      background: var(--c-main);
+      border-color: var(--c-main);
+      box-shadow: 0 4px 16px rgba(11,79,74,0.25);
     }
     .kpi-value {
       font-size: 18px;
@@ -288,11 +303,13 @@
       line-height: 1;
       margin-bottom: 5px;
     }
+    .kpi-card.accent .kpi-value { color: #fff; }
     .kpi-label {
       font-size: 10px;
       color: var(--c-muted);
       line-height: 1.4;
     }
+    .kpi-card.accent .kpi-label { color: rgba(255,255,255,0.75); }
 
     /* ── Heatmap ── */
     .heatmap-card {
@@ -302,15 +319,16 @@
       margin: 0 16px;
       padding: 14px 16px;
       overflow-x: auto;
+      box-shadow: 0 4px 16px rgba(11,79,74,0.06);
     }
     .heatmap-table {
       width: 100%;
       border-collapse: separate;
-      border-spacing: 3px;
+      border-spacing: 4px;
     }
     .heatmap-table th {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--c-muted);
       text-align: center;
       padding: 4px 6px;
@@ -319,14 +337,14 @@
     .heatmap-table td { text-align: center; padding: 0; }
     .hm-cell {
       width: 100%;
-      height: 30px;
-      border-radius: 6px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      min-width: 52px;
+      font-size: 12px;
+      font-weight: 500;
+      min-width: 56px;
     }
     .hm-day {
       font-size: 11px;
@@ -361,6 +379,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      box-shadow: 0 4px 16px rgba(11,79,74,0.06);
     }
     .rank-circle {
       width: 30px;
@@ -385,10 +404,7 @@
       text-align: center;
       border-top: 1px solid var(--c-border);
     }
-    .footer-updated {
-      font-size: 11px;
-      color: var(--c-muted);
-    }
+    .footer-updated { font-size: 11px; color: var(--c-muted); }
 
     /* ── Loading & Error ── */
     .loading {
@@ -425,13 +441,9 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WL8N2R87"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WL8N2R87"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+
 <div class="app">
 
-  <!-- Header -->
   <div class="app-header">
     <img src="hoa-surf-insights-logo.png" alt="Hoa Surf Insights logo" />
     <div class="header-text">
@@ -440,16 +452,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 
-  <!-- Loading state -->
   <div class="loading" id="loading-state">
     <div class="spinner"></div>
     <p>Chargement des prévisions...</p>
   </div>
 
-  <!-- Main content -->
-  <div id="main-content" style="display:none; flex:1; display:none; flex-direction:column;">
+  <div id="main-content" style="display:none; flex:1; flex-direction:column;">
 
-    <!-- Filters -->
     <div class="filters">
       <div class="filter-wrap">
         <label>Spot</label>
@@ -461,13 +470,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
-    <!-- Tabs -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="day">Vue du jour</button>
       <button class="tab-btn" data-tab="week">7 jours</button>
     </div>
 
-    <!-- Tab: Vue du jour -->
     <div class="tab-panel active" id="tab-day">
       <div class="section-label">Notes du jour</div>
       <div class="chart-card">
@@ -477,7 +484,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="slots-container"></div>
     </div>
 
-    <!-- Tab: 7 jours -->
     <div class="tab-panel" id="tab-week">
       <div class="kpi-row" id="kpi-row"></div>
       <div class="section-label">Heatmap — notes par créneau</div>
@@ -491,7 +497,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="section-label">Tendance — moyenne journalière</div>
       <div class="chart-card">
-        <div class="chart-wrap" style="position:relative;height:160px;">
+        <div style="position:relative;height:160px;">
           <canvas id="chart-trend"></canvas>
         </div>
       </div>
@@ -501,7 +507,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div>
 
-  <!-- Footer -->
   <div class="app-footer">
     <div class="footer-updated" id="last-updated"></div>
   </div>
@@ -552,6 +557,40 @@ function fmtAvg(n) {
 }
 function val(v) { return (v === "" || v === undefined || v === null) ? "—" : v; }
 
+function houleType(row) {
+  const h2 = row["Houle 2 — Hauteur (m)"];
+  const h3 = row["Houle 3 — Hauteur (m)"];
+  const hasH2 = h2 && h2 !== "—" && h2 !== "";
+  const hasH3 = h3 && h3 !== "—" && h3 !== "";
+  return (hasH2 || hasH3) ? "Houle multiple" : "Houle unique";
+}
+
+// SVG ring for score display
+function scoreRing(n) {
+  const v = parseFloat(n);
+  const bg = noteColor(n);
+  const tx = noteTextColor(n);
+  const pct = isNaN(v) ? 0 : v / 10;
+  const r = 26;
+  const circ = 2 * Math.PI * r;
+  const dash = circ * pct;
+  const gap  = circ - dash;
+  const displayNum = isNaN(v) ? "—" : Math.round(v);
+  return `
+    <div class="score-ring-wrap">
+      <svg width="60" height="60" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="${r}" fill="none" stroke="#E0EEEC" stroke-width="5"/>
+        <circle cx="30" cy="30" r="${r}" fill="none" stroke="${bg}" stroke-width="5"
+          stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}"
+          stroke-linecap="round"/>
+      </svg>
+      <div class="score-ring-text">
+        <div class="score-ring-num" style="color:${bg};">${displayNum}</div>
+        <div class="score-ring-denom">/10</div>
+      </div>
+    </div>`;
+}
+
 let allData = [];
 let trendChart = null;
 
@@ -589,27 +628,11 @@ function populateFilters() {
   updateDates();
 }
 
-function houleType(row) {
-  const h2 = row["Houle 2 — Hauteur (m)"];
-  const h3 = row["Houle 3 — Hauteur (m)"];
-  const hasH2 = h2 && h2 !== "—" && h2 !== "";
-  const hasH3 = h3 && h3 !== "—" && h3 !== "";
-  return (hasH2 || hasH3) ? "Houle multiple" : "Houle unique";
-}
-
-function houleType(row) {
-  const h2 = row["Houle 2 — Hauteur (m)"];
-  const h3 = row["Houle 3 — Hauteur (m)"];
-  const hasH2 = h2 && h2 !== "—" && h2 !== "";
-  const hasH3 = h3 && h3 !== "—" && h3 !== "";
-  return (hasH2 || hasH3) ? "Houle multiple" : "Houle unique";
-}
-
 function renderDay(spot, date) {
   const rows = allData.filter(r => r["Spot"] === spot && r["Date"] === date);
   const sorted = [...rows].sort((a, b) => (b._note || 0) - (a._note || 0));
 
-  // Horizontal bar chart
+  // Horizontal bars with gradient
   const hbar = document.getElementById("hbar-day");
   hbar.innerHTML = rows.map(row => {
     const n   = row._note;
@@ -617,11 +640,15 @@ function renderDay(spot, date) {
     const bg  = noteColor(n);
     const tx  = noteTextColor(n);
     const lbl = n !== null ? fmt(n) : "—";
+    // gradient: darken left, lighten right within same hue
+    const gradStyle = n !== null && n >= 5
+      ? `background: linear-gradient(90deg, ${bg}, ${bg}CC); box-shadow: 0 2px 8px ${bg}44;`
+      : `background: linear-gradient(90deg, ${bg}, ${bg}CC);`;
     return `
     <div class="hbar-row">
       <div class="hbar-label">${val(row["Moment"])}</div>
       <div class="hbar-wrap">
-        <div class="hbar-fill" style="width:${pct}%;background:${bg};color:${tx};">${lbl}</div>
+        <div class="hbar-fill" style="width:${pct}%;${gradStyle}color:${tx};">${lbl}</div>
       </div>
     </div>`;
   }).join("");
@@ -631,16 +658,14 @@ function renderDay(spot, date) {
   container.innerHTML = sorted.map((row, idx) => {
     const n      = row._note;
     const label  = noteLabel(n);
-    const bg     = noteColor(n);
-    const tx     = noteTextColor(n);
     const isBest = idx === 0 && n !== null;
     const h  = val(row["Houle — Hauteur (m)"]);
     const p  = val(row["Houle — Période (s)"]);
+    const hd = val(row["Houle — Direction"]);
     const wd = val(row["Vent — Direction"]);
     const ws = val(row["Vent — Vitesse (km/h)"]);
     const we = val(row["État du vent"]);
     const mh = val(row["Marée haute — Heure"]);
-    const mb = val(row["Marée basse — Heure"]);
     const en = val(row["Énergie (kJ)"]);
     const co = val(row["Commentaire"]);
     return `
@@ -651,7 +676,7 @@ function renderDay(spot, date) {
           ${label ? `<span class="slot-badge" style="background:${label.bg};color:${label.color}">${label.text}</span>` : ""}
           ${isBest ? `<div class="best-badge">✓ Meilleur créneau</div>` : ""}
         </div>
-        <div class="score-circle" style="background:${bg};color:${tx};">${fmt(n)}</div>
+        ${scoreRing(n)}
       </div>
       <p class="comment">${co}</p>
       <div class="divider"></div>
@@ -662,7 +687,7 @@ function renderDay(spot, date) {
         <div class="cond-item"><div class="cond-label">État</div><div class="cond-value">${we}</div></div>
         <div class="cond-item"><div class="cond-label">Marée haute</div><div class="cond-value">${mh}</div></div>
         <div class="cond-item"><div class="cond-label">Énergie</div><div class="cond-value">${en} kJ</div></div>
-        <div class="cond-item"><div class="cond-label">Direction houle</div><div class="cond-value">${val(row["Houle — Direction"])}</div></div>
+        <div class="cond-item"><div class="cond-label">Direction houle</div><div class="cond-value">${hd}</div></div>
         <div class="cond-item"><div class="cond-label">Type de houle</div><div class="cond-value">${houleType(row)}</div></div>
       </div>
     </div>`;
@@ -675,11 +700,10 @@ function renderWeek(spot) {
   const bestNote  = notes.length ? Math.max(...notes) : null;
   const avgNote   = notes.length ? (notes.reduce((a,b)=>a+b,0)/notes.length) : null;
   const goodCount = notes.filter(n => n >= 7).length;
-  const bestRow   = rows.reduce((b,r) => (!b||(r._note||0)>(b._note||0)) ? r : b, null);
 
-  // KPIs
+  // KPIs — best note gets accent card
   document.getElementById("kpi-row").innerHTML = `
-    <div class="kpi-card">
+    <div class="kpi-card accent">
       <div class="kpi-value">${bestNote !== null ? fmt(bestNote) : "—"}</div>
       <div class="kpi-label">Meilleure<br>note</div>
     </div>
@@ -741,7 +765,14 @@ function renderWeek(spot) {
     type: "bar",
     data: {
       labels: tDates,
-      datasets: [{ data: tVals, backgroundColor: tVals.map(noteColor), borderRadius: 6, borderSkipped: false }]
+      datasets: [{
+        data: tVals,
+        backgroundColor: tVals.map(v => noteColor(v) + "CC"),
+        borderColor: tVals.map(noteColor),
+        borderWidth: 1,
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
