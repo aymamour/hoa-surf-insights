@@ -2,6 +2,20 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WL8N2R87');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WL8N2R87');</script>
+  <!-- End Google Tag Manager -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Hoa Surf Insights</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>" />
@@ -407,6 +421,14 @@
   </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WL8N2R87"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WL8N2R87"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="app">
 
   <!-- Header -->
@@ -567,6 +589,22 @@ function populateFilters() {
   updateDates();
 }
 
+function houleType(row) {
+  const h2 = row["Houle 2 — Hauteur (m)"];
+  const h3 = row["Houle 3 — Hauteur (m)"];
+  const hasH2 = h2 && h2 !== "—" && h2 !== "";
+  const hasH3 = h3 && h3 !== "—" && h3 !== "";
+  return (hasH2 || hasH3) ? "Houle multiple" : "Houle unique";
+}
+
+function houleType(row) {
+  const h2 = row["Houle 2 — Hauteur (m)"];
+  const h3 = row["Houle 3 — Hauteur (m)"];
+  const hasH2 = h2 && h2 !== "—" && h2 !== "";
+  const hasH3 = h3 && h3 !== "—" && h3 !== "";
+  return (hasH2 || hasH3) ? "Houle multiple" : "Houle unique";
+}
+
 function renderDay(spot, date) {
   const rows = allData.filter(r => r["Spot"] === spot && r["Date"] === date);
   const sorted = [...rows].sort((a, b) => (b._note || 0) - (a._note || 0));
@@ -624,6 +662,8 @@ function renderDay(spot, date) {
         <div class="cond-item"><div class="cond-label">État</div><div class="cond-value">${we}</div></div>
         <div class="cond-item"><div class="cond-label">Marée haute</div><div class="cond-value">${mh}</div></div>
         <div class="cond-item"><div class="cond-label">Énergie</div><div class="cond-value">${en} kJ</div></div>
+        <div class="cond-item"><div class="cond-label">Direction houle</div><div class="cond-value">${val(row["Houle — Direction"])}</div></div>
+        <div class="cond-item"><div class="cond-label">Type de houle</div><div class="cond-value">${houleType(row)}</div></div>
       </div>
     </div>`;
   }).join("");
@@ -648,7 +688,7 @@ function renderWeek(spot) {
       <div class="kpi-label">Moyenne<br>semaine</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-value">${goodCount}/10</div>
+      <div class="kpi-value">${goodCount}</div>
       <div class="kpi-label">Créneaux<br>≥ 7/10</div>
     </div>
   `;
