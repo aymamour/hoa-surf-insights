@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>HOA Surf Insights</title>
+  <title>Hoa Surf Insights</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --c-deep:    #041F1E;
@@ -20,9 +19,6 @@
       --c-border:  #E0EEEC;
       --c-text:    #1A2E2D;
       --c-muted:   #6B8E8C;
-      --c-good:    #0B4F4A;
-      --c-mid:     #FAC775;
-      --c-bad:     #F09595;
       --radius:    14px;
       --radius-sm: 8px;
     }
@@ -42,28 +38,32 @@
 
     /* ── Header ── */
     .app-header {
-      background: var(--c-main);
+      background: var(--c-foam);
       padding: 18px 20px 16px;
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .app-header h1 {
-      color: #fff;
-      font-size: 19px;
+    .app-header img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .header-text h1 {
+      color: var(--c-deep);
+      font-size: 18px;
       font-weight: 700;
       letter-spacing: -0.4px;
       margin-bottom: 2px;
     }
-    .app-header p {
-      color: var(--c-foam);
+    .header-text p {
+      color: var(--c-main);
       font-size: 12px;
       opacity: 0.85;
-    }
-    .header-updated {
-      font-size: 10px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 6px;
     }
 
     /* ── Filters ── */
@@ -121,8 +121,8 @@
       transition: all 0.15s;
     }
     .tab-btn.active {
-      background: var(--c-main);
-      color: #fff;
+      background: var(--c-foam);
+      color: var(--c-deep);
     }
 
     /* ── Tab panels ── */
@@ -147,7 +147,24 @@
       margin: 0 16px;
       padding: 14px 16px;
     }
-    .chart-wrap { position: relative; height: 150px; }
+    .chart-wrap { position: relative; }
+
+    /* ── Horizontal bar chart (day view) ── */
+    .hbar-chart { display: flex; flex-direction: column; gap: 10px; }
+    .hbar-row { display: flex; align-items: center; gap: 10px; }
+    .hbar-label { font-size: 12px; font-weight: 500; color: var(--c-text); width: 72px; flex-shrink: 0; }
+    .hbar-wrap { flex: 1; height: 28px; background: var(--c-bg); border-radius: 6px; overflow: hidden; }
+    .hbar-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: width 0.4s ease;
+      min-width: 48px;
+    }
 
     /* ── Score cards ── */
     .score-card {
@@ -157,7 +174,6 @@
       margin: 0 16px 10px;
       padding: 16px;
       box-shadow: 0 1px 4px rgba(11,79,74,0.05);
-      transition: box-shadow 0.15s;
     }
     .score-card.best {
       border-color: var(--c-swell);
@@ -195,15 +211,17 @@
       margin-top: 4px;
     }
     .score-circle {
-      width: 52px;
-      height: 52px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 14px;
       font-weight: 700;
       flex-shrink: 0;
+      text-align: center;
+      line-height: 1.1;
     }
     .comment {
       font-size: 13px;
@@ -240,17 +258,17 @@
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
-      margin: 0 16px 12px;
+      margin: 14px 16px 10px;
     }
     .kpi-card {
       background: var(--c-card);
       border-radius: var(--radius);
       border: 1px solid var(--c-border);
-      padding: 14px 10px;
+      padding: 10px 8px;
       text-align: center;
     }
     .kpi-value {
-      font-size: 26px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--c-main);
       line-height: 1;
@@ -284,18 +302,15 @@
       padding: 4px 6px;
     }
     .heatmap-table th.row-header { text-align: left; }
-    .heatmap-table td {
-      text-align: center;
-      padding: 0;
-    }
+    .heatmap-table td { text-align: center; padding: 0; }
     .hm-cell {
       width: 100%;
-      height: 34px;
+      height: 30px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 600;
       min-width: 52px;
     }
@@ -347,7 +362,19 @@
     .top-info { flex: 1; }
     .top-date { font-size: 13px; font-weight: 600; color: var(--c-deep); }
     .top-detail { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
-    .top-score { font-size: 22px; font-weight: 700; color: var(--c-main); }
+    .top-score { font-size: 16px; font-weight: 700; color: var(--c-main); white-space: nowrap; }
+
+    /* ── Footer ── */
+    .app-footer {
+      margin-top: auto;
+      padding: 14px 16px;
+      text-align: center;
+      border-top: 1px solid var(--c-border);
+    }
+    .footer-updated {
+      font-size: 11px;
+      color: var(--c-muted);
+    }
 
     /* ── Loading & Error ── */
     .loading {
@@ -384,9 +411,11 @@
 
   <!-- Header -->
   <div class="app-header">
-    <h1>🌊 HOA Surf Insights</h1>
-    <p>Prévisions & analyse IA · Lacanau · La Torche</p>
-    <div class="header-updated" id="last-updated"></div>
+    <img src="hoa-surf-insights-logo.png" alt="Hoa Surf Insights logo" />
+    <div class="header-text">
+      <h1>Hoa Surf Insights</h1>
+      <p>Prévisions &amp; Analyse IA de tes spots préférés</p>
+    </div>
   </div>
 
   <!-- Loading state -->
@@ -395,8 +424,8 @@
     <p>Chargement des prévisions...</p>
   </div>
 
-  <!-- Main content (hidden until data loads) -->
-  <div id="main-content" style="display:none;">
+  <!-- Main content -->
+  <div id="main-content" style="display:none; flex:1; display:none; flex-direction:column;">
 
     <!-- Filters -->
     <div class="filters">
@@ -420,9 +449,7 @@
     <div class="tab-panel active" id="tab-day">
       <div class="section-label">Notes du jour</div>
       <div class="chart-card">
-        <div class="chart-wrap">
-          <canvas id="chart-day"></canvas>
-        </div>
+        <div class="hbar-chart" id="hbar-day"></div>
       </div>
       <div class="section-label">Détail par créneau</div>
       <div id="slots-container"></div>
@@ -442,7 +469,7 @@
       </div>
       <div class="section-label">Tendance — moyenne journalière</div>
       <div class="chart-card">
-        <div class="chart-wrap">
+        <div class="chart-wrap" style="position:relative;height:160px;">
           <canvas id="chart-trend"></canvas>
         </div>
       </div>
@@ -450,66 +477,60 @@
       <div id="top-sessions"></div>
     </div>
 
-  </div><!-- /main-content -->
-</div><!-- /app -->
+  </div>
+
+  <!-- Footer -->
+  <div class="app-footer">
+    <div class="footer-updated" id="last-updated"></div>
+  </div>
+
+</div>
 
 <script>
-// ─────────────────────────────────────────
-// CONFIG
-// ─────────────────────────────────────────
 const API_KEY  = "AIzaSyBBk5v8p_vHKSu2UYbiIWUkAK-aRFG5ohM";
 const SHEET_ID = "1YQBs4xYB-MLDEUUbjbJuDfE1ack2WfzBHZAmenHOTYw";
 const TAB_NAME = "Forecast";
 
-// Vert Atlantique palette
 const C = {
-  deep:    "#041F1E",
-  main:    "#0B4F4A",
-  swell:   "#1A7A72",
-  surface: "#5AADA6",
-  foam:    "#B8DCDA",
-  bg:      "#F5F9F9",
-  mid:     "#FAC775",
-  bad:     "#F09595",
+  deep:"#041F1E", main:"#0B4F4A", swell:"#1A7A72",
+  surface:"#5AADA6", foam:"#B8DCDA", mid:"#FAC775", bad:"#F09595",
 };
 
-// ─────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────
 function noteColor(n) {
   n = parseFloat(n);
   if (isNaN(n)) return "#E0E0E0";
-  if (n >= 7)  return C.main;
-  if (n >= 5)  return C.surface;
-  if (n >= 3)  return C.mid;
+  if (n >= 7) return C.main;
+  if (n >= 5) return C.surface;
+  if (n >= 3) return C.mid;
   return C.bad;
 }
-
 function noteTextColor(n) {
   n = parseFloat(n);
   if (isNaN(n)) return "#888";
-  if (n >= 5)  return "#fff";
-  if (n >= 3)  return "#854F0B";
+  if (n >= 5) return "#fff";
+  if (n >= 3) return "#854F0B";
   return "#A32D2D";
 }
-
 function noteLabel(n) {
   n = parseFloat(n);
-  if (isNaN(n)) return "";
-  if (n >= 8)  return { text: "Excellent",   bg: "#E0F2EF", color: C.main };
-  if (n >= 7)  return { text: "Très bon",    bg: "#E0F2EF", color: C.main };
-  if (n >= 5)  return { text: "Correct",     bg: "#E8F6F5", color: C.swell };
-  if (n >= 3)  return { text: "Médiocre",    bg: "#FFF3DC", color: "#854F0B" };
-  return             { text: "À éviter",     bg: "#FFECEC", color: "#A32D2D" };
+  if (isNaN(n)) return null;
+  if (n >= 8) return { text:"Excellent",  bg:"#E0F2EF", color:C.main };
+  if (n >= 7) return { text:"Très bon",   bg:"#E0F2EF", color:C.main };
+  if (n >= 5) return { text:"Correct",    bg:"#E8F6F5", color:C.swell };
+  if (n >= 3) return { text:"Médiocre",   bg:"#FFF3DC", color:"#854F0B" };
+  return             { text:"À éviter",   bg:"#FFECEC", color:"#A32D2D" };
 }
-
+function fmt(n) {
+  const v = parseFloat(n);
+  return isNaN(v) ? "—" : Math.round(v) + "/10";
+}
+function fmtAvg(n) {
+  const v = parseFloat(n);
+  return isNaN(v) ? "—" : v.toFixed(1) + "/10";
+}
 function val(v) { return (v === "" || v === undefined || v === null) ? "—" : v; }
 
-// ─────────────────────────────────────────
-// FETCH DATA FROM GOOGLE SHEETS
-// ─────────────────────────────────────────
 let allData = [];
-let dayChart = null;
 let trendChart = null;
 
 async function fetchData() {
@@ -517,7 +538,6 @@ async function fetchData() {
   const resp = await fetch(url);
   if (!resp.ok) throw new Error(`HTTP ${resp.status} — ${resp.statusText}`);
   const json = await resp.json();
-
   const [headers, ...rows] = json.values;
   allData = rows.map(row => {
     const obj = {};
@@ -525,117 +545,66 @@ async function fetchData() {
     obj._note = parseFloat(obj["Note"]) || null;
     return obj;
   });
-
-  // Last updated
   const lastUpdate = allData.find(r => r["Mis à jour"])?.["Mis à jour"] || "";
   if (lastUpdate) {
     document.getElementById("last-updated").textContent = `Mis à jour : ${lastUpdate}`;
   }
 }
 
-// ─────────────────────────────────────────
-// POPULATE FILTERS
-// ─────────────────────────────────────────
 function populateFilters() {
   const spotSel = document.getElementById("filter-spot");
   const dateSel = document.getElementById("filter-date");
-
   const spots = [...new Set(allData.map(r => r["Spot"]).filter(Boolean))];
   spotSel.innerHTML = spots.map(s => `<option value="${s}">${s}</option>`).join("");
-
   function updateDates() {
     const spot = spotSel.value;
     const dates = [...new Set(allData.filter(r => r["Spot"] === spot).map(r => r["Date"]).filter(Boolean))];
     dateSel.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join("");
     render();
   }
-
   spotSel.addEventListener("change", updateDates);
   dateSel.addEventListener("change", render);
   updateDates();
 }
 
-// ─────────────────────────────────────────
-// RENDER — VUE DU JOUR
-// ─────────────────────────────────────────
 function renderDay(spot, date) {
   const rows = allData.filter(r => r["Spot"] === spot && r["Date"] === date);
   const sorted = [...rows].sort((a, b) => (b._note || 0) - (a._note || 0));
 
-  // ── Bar chart ──
-  const moments = rows.map(r => r["Moment"]);
-  const notes   = rows.map(r => r._note);
-  const colors  = notes.map(noteColor);
+  // Horizontal bar chart
+  const hbar = document.getElementById("hbar-day");
+  hbar.innerHTML = rows.map(row => {
+    const n   = row._note;
+    const pct = n !== null ? (n / 10 * 100) : 0;
+    const bg  = noteColor(n);
+    const tx  = noteTextColor(n);
+    const lbl = n !== null ? fmt(n) : "—";
+    return `
+    <div class="hbar-row">
+      <div class="hbar-label">${val(row["Moment"])}</div>
+      <div class="hbar-wrap">
+        <div class="hbar-fill" style="width:${pct}%;background:${bg};color:${tx};">${lbl}</div>
+      </div>
+    </div>`;
+  }).join("");
 
-  if (dayChart) dayChart.destroy();
-  const ctx = document.getElementById("chart-day").getContext("2d");
-  dayChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: moments,
-      datasets: [{
-        data: notes,
-        backgroundColor: colors,
-        borderRadius: 6,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-        datalabels: { display: false },
-      },
-      scales: {
-        y: { display: false, min: 0, max: 10 },
-        x: {
-          grid: { display: false },
-          border: { display: false },
-          ticks: { font: { size: 13, weight: "500" }, color: "#444" }
-        }
-      }
-    },
-    plugins: [{
-      id: "labels",
-      afterDatasetsDraw(chart) {
-        const { ctx, data } = chart;
-        chart.getDatasetMeta(0).data.forEach((bar, i) => {
-          const v = data.datasets[0].data[i];
-          if (v === null) return;
-          ctx.save();
-          ctx.fillStyle = "#fff";
-          ctx.font = "bold 13px -apple-system, sans-serif";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`${v}/10`, bar.x, bar.y + (bar.base - bar.y) / 2);
-          ctx.restore();
-        });
-      }
-    }]
-  });
-
-  // ── Slot cards ──
+  // Slot cards
   const container = document.getElementById("slots-container");
   container.innerHTML = sorted.map((row, idx) => {
-    const n       = row._note;
-    const label   = noteLabel(n);
-    const bg      = noteColor(n);
-    const tx      = noteTextColor(n);
-    const nDisp   = n !== null ? Math.round(n) : "—";
-    const isBest  = idx === 0 && n !== null;
-
-    const h   = val(row["Houle — Hauteur (m)"]);
-    const p   = val(row["Houle — Période (s)"]);
-    const wd  = val(row["Vent — Direction"]);
-    const ws  = val(row["Vent — Vitesse (km/h)"]);
-    const we  = val(row["État du vent"]);
-    const mh  = val(row["Marée haute — Heure"]);
-    const mb  = val(row["Marée basse — Heure"]);
-    const en  = val(row["Énergie (kJ)"]);
-    const com = val(row["Commentaire"]);
-
+    const n      = row._note;
+    const label  = noteLabel(n);
+    const bg     = noteColor(n);
+    const tx     = noteTextColor(n);
+    const isBest = idx === 0 && n !== null;
+    const h  = val(row["Houle — Hauteur (m)"]);
+    const p  = val(row["Houle — Période (s)"]);
+    const wd = val(row["Vent — Direction"]);
+    const ws = val(row["Vent — Vitesse (km/h)"]);
+    const we = val(row["État du vent"]);
+    const mh = val(row["Marée haute — Heure"]);
+    const mb = val(row["Marée basse — Heure"]);
+    const en = val(row["Énergie (kJ)"]);
+    const co = val(row["Commentaire"]);
     return `
     <div class="score-card${isBest ? " best" : ""}">
       <div class="score-header">
@@ -644,9 +613,9 @@ function renderDay(spot, date) {
           ${label ? `<span class="slot-badge" style="background:${label.bg};color:${label.color}">${label.text}</span>` : ""}
           ${isBest ? `<div class="best-badge">✓ Meilleur créneau</div>` : ""}
         </div>
-        <div class="score-circle" style="background:${bg};color:${tx}">${nDisp}</div>
+        <div class="score-circle" style="background:${bg};color:${tx};">${fmt(n)}</div>
       </div>
-      <p class="comment">${com}</p>
+      <p class="comment">${co}</p>
       <div class="divider"></div>
       <div class="cond-grid">
         <div class="cond-item"><div class="cond-label">Hauteur</div><div class="cond-value">${h} m</div></div>
@@ -660,170 +629,131 @@ function renderDay(spot, date) {
   }).join("");
 }
 
-// ─────────────────────────────────────────
-// RENDER — 7 JOURS
-// ─────────────────────────────────────────
 function renderWeek(spot) {
   const rows = allData.filter(r => r["Spot"] === spot);
-
-  // ── KPIs ──
   const notes = rows.map(r => r._note).filter(n => n !== null);
-  const bestNote  = notes.length ? Math.max(...notes) : "—";
-  const avgNote   = notes.length ? (notes.reduce((a, b) => a + b, 0) / notes.length).toFixed(1) : "—";
+  const bestNote  = notes.length ? Math.max(...notes) : null;
+  const avgNote   = notes.length ? (notes.reduce((a,b)=>a+b,0)/notes.length) : null;
   const goodCount = notes.filter(n => n >= 7).length;
+  const bestRow   = rows.reduce((b,r) => (!b||(r._note||0)>(b._note||0)) ? r : b, null);
 
-  const bestRow = rows.reduce((best, r) => (!best || (r._note || 0) > (best._note || 0)) ? r : best, null);
-  const bestSub = bestRow ? `${bestRow["Date"]} · ${bestRow["Moment"]}` : "";
-
+  // KPIs
   document.getElementById("kpi-row").innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-value">${bestNote !== "—" ? Math.round(bestNote) : "—"}</div>
+      <div class="kpi-value">${bestNote !== null ? fmt(bestNote) : "—"}</div>
       <div class="kpi-label">Meilleure<br>note</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-value">${avgNote}</div>
+      <div class="kpi-value">${avgNote !== null ? fmtAvg(avgNote) : "—"}</div>
       <div class="kpi-label">Moyenne<br>semaine</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-value">${goodCount}</div>
+      <div class="kpi-value">${goodCount}/10</div>
       <div class="kpi-label">Créneaux<br>≥ 7/10</div>
     </div>
   `;
 
-  // ── Heatmap ──
-  const momentOrder = ["matin", "après-midi", "soir"];
+  // Heatmap
+  const momentOrder = ["matin","après-midi","soir"];
   const dates = [...new Set(rows.map(r => r["Date"]).filter(Boolean))];
-
-  // Build pivot: date → moment → note
   const pivot = {};
   rows.forEach(r => {
     const d = r["Date"];
-    const m = (r["Moment"] || "").toLowerCase().trim();
+    const m = (r["Moment"]||"").toLowerCase().trim();
     if (!pivot[d]) pivot[d] = {};
     pivot[d][m] = r._note;
   });
-
-  const momentLabels = { "matin": "Matin", "après-midi": "Après-midi", "soir": "Soir" };
-
+  const momentLabels = {"matin":"Matin","après-midi":"Après-midi","soir":"Soir"};
   const table = document.getElementById("heatmap-table");
   table.innerHTML = `
-    <thead>
-      <tr>
-        <th class="row-header"></th>
-        ${momentOrder.map(m => `<th>${momentLabels[m]}</th>`).join("")}
-      </tr>
-    </thead>
+    <thead><tr>
+      <th class="row-header"></th>
+      ${momentOrder.map(m=>`<th>${momentLabels[m]}</th>`).join("")}
+    </tr></thead>
     <tbody>
-      ${dates.map(d => `
+      ${dates.map(d=>`
         <tr>
           <td><div class="hm-day">${d}</div></td>
-          ${momentOrder.map(m => {
+          ${momentOrder.map(m=>{
             const n = pivot[d]?.[m];
-            const bg = n !== undefined ? noteColor(n) : "#F0F0F0";
-            const tx = n !== undefined ? noteTextColor(n) : "#aaa";
-            const disp = n !== undefined ? Math.round(n) : "—";
+            const bg = n!==undefined ? noteColor(n) : "#F0F0F0";
+            const tx = n!==undefined ? noteTextColor(n) : "#aaa";
+            const disp = n!==undefined ? fmt(n) : "—";
             return `<td><div class="hm-cell" style="background:${bg};color:${tx}">${disp}</div></td>`;
           }).join("")}
-        </tr>
-      `).join("")}
-    </tbody>
-  `;
+        </tr>`).join("")}
+    </tbody>`;
 
-  // ── Trend chart ──
+  // Trend chart
   const dailyAvg = {};
   rows.forEach(r => {
     if (!dailyAvg[r["Date"]]) dailyAvg[r["Date"]] = [];
     if (r._note !== null) dailyAvg[r["Date"]].push(r._note);
   });
-  const trendDates = Object.keys(dailyAvg);
-  const trendVals  = trendDates.map(d => {
+  const tDates = Object.keys(dailyAvg);
+  const tVals  = tDates.map(d => {
     const arr = dailyAvg[d];
-    return arr.length ? parseFloat((arr.reduce((a,b) => a+b, 0) / arr.length).toFixed(1)) : null;
+    return arr.length ? parseFloat((arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1)) : null;
   });
-
   if (trendChart) trendChart.destroy();
-  const ctx2 = document.getElementById("chart-trend").getContext("2d");
-  trendChart = new Chart(ctx2, {
+  const ctx = document.getElementById("chart-trend").getContext("2d");
+  trendChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: trendDates,
-      datasets: [{
-        data: trendVals,
-        backgroundColor: trendVals.map(noteColor),
-        borderRadius: 6,
-        borderSkipped: false,
-      }]
+      labels: tDates,
+      datasets: [{ data: tVals, backgroundColor: tVals.map(noteColor), borderRadius: 6, borderSkipped: false }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{enabled:false} },
       scales: {
-        y: { display: false, min: 0, max: 10 },
+        y: { display:false, min:0, max:10 },
         x: {
-          grid: { display: false },
-          border: { display: false },
-          ticks: { font: { size: 10 }, color: "#666",
-            callback: function(val, i) {
-              const d = trendDates[i] || "";
-              return d.split(" ").slice(0,2).join(" ");
-            }
+          grid:{display:false}, border:{display:false},
+          ticks: { font:{size:10}, color:"#666",
+            callback: function(v,i) { return (tDates[i]||"").split(" ").slice(0,2).join(" "); }
           }
         }
       }
     },
-    plugins: [{
-      id: "trendLabels",
+    plugins:[{
+      id:"trendLabels",
       afterDatasetsDraw(chart) {
-        const { ctx, data } = chart;
-        chart.getDatasetMeta(0).data.forEach((bar, i) => {
+        const {ctx,data} = chart;
+        chart.getDatasetMeta(0).data.forEach((bar,i) => {
           const v = data.datasets[0].data[i];
-          if (v === null) return;
+          if (v===null) return;
           ctx.save();
-          ctx.fillStyle = "#fff";
-          ctx.font = "bold 11px -apple-system, sans-serif";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`${v}`, bar.x, bar.y + (bar.base - bar.y) / 2);
+          ctx.fillStyle="#fff";
+          ctx.font="bold 10px -apple-system,sans-serif";
+          ctx.textAlign="center";
+          ctx.textBaseline="middle";
+          ctx.fillText(fmt(v), bar.x, bar.y+(bar.base-bar.y)/2);
           ctx.restore();
         });
       }
     }]
   });
 
-  // ── Top 3 ──
-  const top3 = [...rows]
-    .filter(r => r._note !== null)
-    .sort((a, b) => b._note - a._note)
-    .slice(0, 3);
-
+  // Top 3
+  const top3 = [...rows].filter(r=>r._note!==null).sort((a,b)=>b._note-a._note).slice(0,3);
   const rankStyles = [
-    { bg: C.main,    color: "#fff" },
-    { bg: C.surface, color: "#fff" },
-    { bg: C.foam,    color: C.deep },
+    {bg:C.main,color:"#fff"}, {bg:C.surface,color:"#fff"}, {bg:C.foam,color:C.deep}
   ];
-
-  document.getElementById("top-sessions").innerHTML = top3.map((row, i) => {
+  document.getElementById("top-sessions").innerHTML = top3.map((row,i)=>{
     const rs = rankStyles[i];
-    const h  = val(row["Houle — Hauteur (m)"]);
-    const p  = val(row["Houle — Période (s)"]);
-    const hd = val(row["Houle — Direction"]);
-    const we = val(row["État du vent"]);
     return `
     <div class="top-row">
       <div class="rank-circle" style="background:${rs.bg};color:${rs.color}">${i+1}</div>
       <div class="top-info">
         <div class="top-date">${val(row["Date"])} · ${val(row["Moment"])}</div>
-        <div class="top-detail">${h}m / ${p}s ${hd} · ${we}</div>
+        <div class="top-detail">${val(row["Houle — Hauteur (m)"])}m / ${val(row["Houle — Période (s)"])}s ${val(row["Houle — Direction"])} · ${val(row["État du vent"])}</div>
       </div>
-      <div class="top-score">${Math.round(row._note)}</div>
+      <div class="top-score">${fmt(row._note)}</div>
     </div>`;
   }).join("");
 }
 
-// ─────────────────────────────────────────
-// RENDER — MAIN
-// ─────────────────────────────────────────
 function render() {
   const spot = document.getElementById("filter-spot").value;
   const date = document.getElementById("filter-date").value;
@@ -831,9 +761,6 @@ function render() {
   renderWeek(spot);
 }
 
-// ─────────────────────────────────────────
-// TABS
-// ─────────────────────────────────────────
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -843,21 +770,17 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 
-// ─────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────
 (async () => {
   try {
     await fetchData();
     document.getElementById("loading-state").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
+    const mc = document.getElementById("main-content");
+    mc.style.display = "flex";
+    mc.style.flexDirection = "column";
     populateFilters();
-  } catch (err) {
+  } catch(err) {
     document.getElementById("loading-state").innerHTML = `
-      <div class="error-msg">
-        ❌ Impossible de charger les données.<br>
-        <small>${err.message}</small>
-      </div>`;
+      <div class="error-msg">❌ Impossible de charger les données.<br><small>${err.message}</small></div>`;
   }
 })();
 </script>
