@@ -612,18 +612,34 @@ async function fetchData() {
   }
 }
 
+// ─── Cookie helpers ───────────────────────────────────────────────────────────
+function setCookie(name, value, days = 365) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires};path=/`;
+}
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 function populateFilters() {
   const spotSel = document.getElementById("filter-spot");
   const dateSel = document.getElementById("filter-date");
   const spots = [...new Set(allData.map(r => r["Spot"]).filter(Boolean))];
-  spotSel.innerHTML = spots.map(s => `<option value="${s}">${s}</option>`).join("");
+  const savedSpot = getCookie("hoa_last_spot");
+  const defaultSpot = (savedSpot && spots.includes(savedSpot)) ? savedSpot : (spots.includes("Lacanau Ocean") ? "Lacanau Ocean" : spots[0]);
+  spotSel.innerHTML = spots.map(s => `<option value="${s}"${s === defaultSpot ? " selected" : ""}>${s}</option>`).join("");
   function updateDates() {
     const spot = spotSel.value;
     const dates = [...new Set(allData.filter(r => r["Spot"] === spot).map(r => r["Date"]).filter(Boolean))];
     dateSel.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join("");
     render();
   }
-  spotSel.addEventListener("change", updateDates);
+  spotSel.addEventListener("change", () => {
+    setCookie("hoa_last_spot", spotSel.value);
+    updateDates();
+  });
   dateSel.addEventListener("change", render);
   updateDates();
 }
