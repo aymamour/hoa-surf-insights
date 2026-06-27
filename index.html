@@ -406,6 +406,64 @@
     }
     .footer-updated { font-size: 11px; color: var(--c-muted); }
 
+    /* ── Install prompt ── */
+    .install-prompt {
+      margin-top: 12px;
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      text-align: left;
+    }
+    .install-prompt-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--c-deep);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .install-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .install-steps li {
+      font-size: 12px;
+      color: var(--c-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .install-step-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--c-main);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .install-dismiss {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--c-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
     /* ── Loading & Error ── */
     .loading {
       display: flex;
@@ -536,6 +594,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="app-footer">
     <div class="footer-updated" id="last-updated"></div>
+    <div class="install-prompt" id="install-prompt" style="display:none;">
+      <div class="install-prompt-title">
+        <span>📲</span>
+        <span id="install-title"></span>
+      </div>
+      <ol class="install-steps" id="install-steps"></ol>
+      <button class="install-dismiss" onclick="dismissInstall()">Ne plus afficher</button>
+    </div>
   </div>
 
 </div>
@@ -902,6 +968,48 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
       <div class="error-msg">❌ Impossible de charger les données.<br><small>${err.message}</small></div>`;
   }
 })();
+
+// ── Install prompt ────────────────────────────────────────────────────────────
+function showInstallPrompt() {
+  if (localStorage.getItem("hoa_install_dismissed")) return;
+
+  const isIOS        = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid    = /android/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+                    || window.navigator.standalone === true;
+
+  if (isStandalone) return;
+  if (!isIOS && !isAndroid) return;
+
+  const prompt = document.getElementById("install-prompt");
+  const title  = document.getElementById("install-title");
+  const steps  = document.getElementById("install-steps");
+
+  if (isIOS) {
+    title.textContent = "Installer l'app sur iPhone / iPad";
+    steps.innerHTML = `
+      <li><div class="install-step-num">1</div><span>Ouvre cette page dans <strong>Safari</strong></span></li>
+      <li><div class="install-step-num">2</div><span>Appuie sur l'icône <strong>Partager</strong> ↑ en bas de l'écran</span></li>
+      <li><div class="install-step-num">3</div><span>Sélectionne <strong>"Sur l'écran d'accueil"</strong></span></li>
+      <li><div class="install-step-num">4</div><span>Appuie sur <strong>"Ajouter"</strong> en haut à droite</span></li>`;
+  } else {
+    title.textContent = "Installer l'app sur Android";
+    steps.innerHTML = `
+      <li><div class="install-step-num">1</div><span>Ouvre cette page dans <strong>Chrome</strong></span></li>
+      <li><div class="install-step-num">2</div><span>Appuie sur le menu <strong>⋮</strong> en haut à droite</span></li>
+      <li><div class="install-step-num">3</div><span>Sélectionne <strong>"Ajouter à l'écran d'accueil"</strong></span></li>
+      <li><div class="install-step-num">4</div><span>Confirme en appuyant sur <strong>"Ajouter"</strong></span></li>`;
+  }
+
+  prompt.style.display = "block";
+}
+
+function dismissInstall() {
+  localStorage.setItem("hoa_install_dismissed", "1");
+  document.getElementById("install-prompt").style.display = "none";
+}
+
+window.addEventListener("load", () => setTimeout(showInstallPrompt, 1500));
 </script>
 </body>
 </html>
