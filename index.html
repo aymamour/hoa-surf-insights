@@ -46,31 +46,19 @@
     /* ── Header ── */
     .app-header {
       background: var(--c-foam);
-      padding: 18px 20px 0;
+      padding: 18px 20px 16px;
       position: sticky;
       top: 0;
       z-index: 100;
-      overflow: hidden;
-    }
-    .app-header-content {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding-bottom: 22px;
-      position: relative;
-    }
-    .app-header-wave {
-      display: block;
-      width: 100%;
-      margin-bottom: -2px;
-      position: relative;
     }
     .app-header img {
-      width: 42px;
-      height: 42px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
       flex-shrink: 0;
-      position: relative;
     }
     .header-text h1 {
       color: var(--c-deep);
@@ -82,7 +70,6 @@
     .header-text p {
       color: var(--c-main);
       font-size: 12px;
-      font-weight: 500;
       opacity: 0.85;
     }
 
@@ -458,16 +445,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="app">
 
   <div class="app-header">
-    <svg style="position:absolute;bottom:0;left:0;right:0;width:100%;opacity:0.12;" viewBox="0 0 400 50" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,25 C70,5 130,45 200,25 C270,5 330,45 400,25 L400,50 L0,50 Z" fill="#0B4F4A"/>
-      <path d="M0,35 C60,18 120,48 190,32 C260,16 320,44 400,35 L400,50 L0,50 Z" fill="#0B4F4A"/>
-    </svg>
-    <div class="app-header-content">
-      <img src="hoa-surf-insights-logo.png" alt="Hoa Surf Insights logo" />
-      <div class="header-text">
-        <h1>Hoa Surf Insights</h1>
-        <p>Prévisions &amp; Analyse IA de tes spots préférés</p>
-      </div>
+    <img src="hoa-surf-insights-logo.png" alt="Hoa Surf Insights logo" />
+    <div class="header-text">
+      <h1>Hoa Surf Insights</h1>
+      <p>Prévisions &amp; Analyse IA de tes spots préférés</p>
     </div>
   </div>
 
