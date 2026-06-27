@@ -435,6 +435,33 @@
       color: #A32D2D;
     }
   </style>
+<!-- ============================================================ -->
+<!-- PWA — paste these lines inside your <head> in index.html    -->
+<!-- ============================================================ -->
+
+<!-- Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Theme color (browser address bar on Android) -->
+<meta name="theme-color" content="#0a1628">
+
+<!-- iOS "Add to Home Screen" support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hoa Surf">
+<link rel="apple-touch-icon" href="hoa-surf-insights-logo.png">
+
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/hoa-surf-insights/service-worker.js')
+        .then(reg => console.log('[PWA] Service worker registered:', reg.scope))
+        .catch(err => console.warn('[PWA] Registration failed:', err));
+    });
+  }
+</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
