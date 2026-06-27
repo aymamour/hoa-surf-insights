@@ -633,14 +633,19 @@ function populateFilters() {
   function updateDates() {
     const spot = spotSel.value;
     const dates = [...new Set(allData.filter(r => r["Spot"] === spot).map(r => r["Date"]).filter(Boolean))];
-    dateSel.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join("");
+    const savedDate = sessionStorage.getItem("hoa_last_date");
+    const defaultDate = (savedDate && dates.includes(savedDate)) ? savedDate : dates[0];
+    dateSel.innerHTML = dates.map(d => `<option value="${d}"${d === defaultDate ? " selected" : ""}>${d}</option>`).join("");
     render();
   }
   spotSel.addEventListener("change", () => {
     setCookie("hoa_last_spot", spotSel.value);
     updateDates();
   });
-  dateSel.addEventListener("change", render);
+  dateSel.addEventListener("change", () => {
+    sessionStorage.setItem("hoa_last_date", dateSel.value);
+    render();
+  });
   updateDates();
 }
 
