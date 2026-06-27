@@ -1,0 +1,26 @@
+{
+  "name": "Hoa Surf Insights",
+  "short_name": "Hoa Surf",
+  "description": "Prévisions & Analyse IA de tes spots préférés",
+  "start_url": "/hoa-surf-insights/",
+  "scope": "/hoa-surf-insights/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "hoa-surf-insights-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "hoa-surf-insights-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
