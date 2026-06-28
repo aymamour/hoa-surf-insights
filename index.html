@@ -642,7 +642,10 @@ function noteLabel(n) {
 }
 function fmt(n) {
   const v = parseFloat(n);
-  return isNaN(v) ? "—" : Math.round(v) + "/10";
+  if (isNaN(v)) return "—";
+  // Keep one decimal only if needed (7.5 → "7.5/10", 7.0 → "7/10")
+  const display = Number.isInteger(v) ? v : parseFloat(v.toFixed(1));
+  return display + "/10";
 }
 function fmtAvg(n) {
   const v = parseFloat(n);
