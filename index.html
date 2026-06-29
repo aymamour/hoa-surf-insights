@@ -802,11 +802,11 @@ function renderDay(spot, date) {
         <div class="cond-item"><div class="cond-label">Période</div><div class="cond-value">${p} s</div></div>
         <div class="cond-item"><div class="cond-label">Vent</div><div class="cond-value">${ws} km/h ${wd}</div></div>
         <div class="cond-item"><div class="cond-label">État</div><div class="cond-value">${we}</div></div>
-        <div class="cond-item"><div class="cond-label">Marée haute</div><div class="cond-value">${mh}</div></div>
+        <div class="cond-item"><div class="cond-label">Marée haute</div><div class="cond-value">${val(row["Marée haute — Heure"]) === "—" ? "—" : val(row["Marée haute — Heure"]) + " · " + val(row["Marée haute — Hauteur (m)"]) + "m"}</div></div>
         <div class="cond-item"><div class="cond-label">Énergie</div><div class="cond-value">${en} kJ</div></div>
         <div class="cond-item"><div class="cond-label">Direction houle</div><div class="cond-value">${hd}</div></div>
         <div class="cond-item"><div class="cond-label">Type de houle</div><div class="cond-value">${houleType(row)}</div></div>
-        <div class="cond-item"><div class="cond-label">Marée basse</div><div class="cond-value">${val(row["Marée basse — Heure"])} · ${val(row["Marée basse — Hauteur (m)"])}m</div></div>
+        <div class="cond-item"><div class="cond-label">Marée basse</div><div class="cond-value">${val(row["Marée basse — Heure"]) === "—" ? "—" : val(row["Marée basse — Heure"]) + " · " + val(row["Marée basse — Hauteur (m)"]) + "m"}</div></div>
         <div class="cond-item"><div class="cond-label">Précipitations</div><div class="cond-value">${val(row["Précipitations (mm)"]) === "—" ? "Aucune" : val(row["Précipitations (mm)"]) + " mm"}</div></div>
       </div>
     </div>`;
