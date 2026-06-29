@@ -806,6 +806,8 @@ function renderDay(spot, date) {
         <div class="cond-item"><div class="cond-label">Énergie</div><div class="cond-value">${en} kJ</div></div>
         <div class="cond-item"><div class="cond-label">Direction houle</div><div class="cond-value">${hd}</div></div>
         <div class="cond-item"><div class="cond-label">Type de houle</div><div class="cond-value">${houleType(row)}</div></div>
+        <div class="cond-item"><div class="cond-label">Marée basse</div><div class="cond-value">${val(row["Marée basse — Heure"])} · ${val(row["Marée basse — Hauteur (m)"])}m</div></div>
+        <div class="cond-item"><div class="cond-label">Précipitations</div><div class="cond-value">${val(row["Précipitations (mm)"]) === "—" ? "Aucune" : val(row["Précipitations (mm)"]) + " mm"}</div></div>
       </div>
     </div>`;
   }).join("");
