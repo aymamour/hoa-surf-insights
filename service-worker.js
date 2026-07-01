@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hoa-surf-v2';
+const CACHE_NAME = 'hoa-surf-v3';
 
 // Files to cache for offline shell
 const SHELL_ASSETS = [
