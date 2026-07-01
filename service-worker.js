@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hoa-surf-v1';
+const CACHE_NAME = 'hoa-surf-v2';
 
 // Files to cache for offline shell
 const SHELL_ASSETS = [
@@ -29,19 +29,26 @@ self.addEventListener('activate', event => {
 });
 
 // Fetch strategy:
-// - App shell (HTML, logo, manifest) → cache first
-// - External API calls (forecast data, Gemini) → network first, no cache
+// - App shell (HTML, logo, manifest) → network first, fallback to cache
+// - External API calls (forecast data) → network first, no cache
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   const isShell = url.origin === self.location.origin;
 
   if (isShell) {
-    // Cache-first for local assets
+    // Network-first for local assets — ensures fresh HTML on every deploy
     event.respondWith(
-      caches.match(event.request).then(cached => cached || fetch(event.request))
+      fetch(event.request)
+        .then(response => {
+          // Update cache with fresh version
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))  // fallback to cache if offline
     );
   } else {
-    // Network-first for external API calls (surf data, AI ratings)
+    // Network-first for external API calls
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))
     );
