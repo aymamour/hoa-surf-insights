@@ -671,7 +671,7 @@ function scoreRing(n) {
   const circ = 2 * Math.PI * r;
   const dash = circ * pct;
   const gap  = circ - dash;
-  const displayNum = isNaN(v) ? "—" : Math.round(v);
+  const displayNum = isNaN(v) ? "—" : (Number.isInteger(v) ? v : parseFloat(v.toFixed(1)));
   return `
     <div class="score-ring-wrap">
       <svg width="60" height="60" viewBox="0 0 60 60">
