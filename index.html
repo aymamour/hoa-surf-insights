@@ -699,7 +699,8 @@ async function fetchData() {
   allData = rows.map(row => {
     const obj = {};
     headers.forEach((h, i) => obj[h] = row[i] ?? "");
-    obj._note = parseFloat(obj["Note"]) || null;
+    const parsedNote = parseFloat(obj["Note"]);
+    obj._note = isNaN(parsedNote) ? null : parsedNote;
     return obj;
   });
   const lastUpdate = allData.find(r => r["Mis à jour"])?.["Mis à jour"] || "";
